@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REVIEW Worksheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== 1. CSS VARIABLES ===== */
+:root{
+  --bg:#fff7e8; --ink:#2b2350; --muted:#6b6590; --card:#ffffff;
+  --pink:#ff5ca8; --blue:#3ea8ff; --green:#2ecf8f; --yellow:#ffc933; --purple:#8a5cff; --orange:#ff8a3d;
+  --ok:#1fb878; --bad:#f0455a;
+  --radius:22px; --shadow:0 10px 28px rgba(60,40,140,.14);
+  --font-title:'Baloo 2',cursive; --font-body:'Nunito',system-ui,sans-serif;
+}
+/* ===== 2. BASE ===== */
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body);color:var(--ink);font-size:17px;
+  background:radial-gradient(circle at 10% 0%,#ffe3f1 0,transparent 40%),radial-gradient(circle at 90% 10%,#dff1ff 0,transparent 40%),var(--bg);
+  min-height:100vh;overflow-x:hidden}
+main{max-width:920px;margin:0 auto;padding:16px 16px 120px;position:relative;z-index:1}
+/* floating stars background */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;bottom:-40px;animation:floatUp linear infinite;opacity:.55}
+@keyframes floatUp{to{transform:translateY(-115vh) rotate(360deg)}}
+/* ===== 3. HEADER ===== */
+header{text-align:center;padding:30px 10px 10px}
+h1{font-family:var(--font-title);font-weight:800;font-size:clamp(2.6rem,9vw,4.8rem);margin:0;letter-spacing:2px;
+  background:linear-gradient(90deg,var(--pink),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));
+  background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.bounce{display:inline-block;animation:bounce 1.6s ease-in-out infinite}
+@keyframes bounce{50%{transform:translateY(-12px) rotate(8deg)}}
+header p{color:var(--muted);font-weight:700;margin:6px 0 0}
+/* ===== 4. CARDS ===== */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin:22px 0;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(60,40,140,.2)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.info-grid{grid-template-columns:1fr}}
+label.f{font-weight:800;font-size:.9rem;color:var(--muted);display:block;margin-bottom:4px}
+input[type=text],input[type=date]{width:100%;font:inherit;font-weight:700;color:var(--ink);padding:10px 14px;border:3px solid #e6e0ff;border-radius:14px;background:#fbfaff;transition:.2s}
+input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 4px rgba(138,92,255,.18)}
+/* ===== 5. SECTIONS ===== */
+.section-title{font-family:var(--font-title);font-size:1.9rem;margin:0 0 4px;padding:8px 20px;border-radius:50px;display:inline-block;color:#fff;box-shadow:var(--shadow)}
+.activity{margin-top:22px;padding-top:6px}
+.activity h3{font-family:var(--font-title);margin:0 0 2px;font-size:1.25rem}
+.activity .instr{margin:0 0 12px;color:var(--muted);font-weight:700}
+.q{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 12px;border-radius:14px;margin:6px 0;line-height:2.1;transition:background .2s}
+.q:hover{background:#f6f2ff}
+.q .n{font-weight:800;color:var(--purple);min-width:26px}
+/* higher specificity than input[type=text] so the blanks stay small and inline */
+input[type=text].blank{width:110px;display:inline-block;vertical-align:middle;padding:2px 10px;margin:0 4px;border-radius:10px;border-width:0 0 3px 0;border-bottom:3px solid var(--purple);background:#f4f0ff;text-align:center}
+input[type=text].blank.long{width:100%;max-width:520px;margin:0;text-align:left;padding:6px 12px}
+.q > span:not(.n){display:inline}
+.ok{border-color:var(--ok)!important;background:#e5fbf1!important}
+.bad{border-color:var(--bad)!important;background:#ffe9ed!important;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+/* choice buttons */
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;font-weight:800;cursor:pointer;border:3px solid #e1dbff;background:#fff;color:var(--ink);padding:6px 14px;border-radius:50px;transition:.2s}
+.opt:hover{transform:translateY(-2px) scale(1.05);border-color:var(--blue)}
+.opt.sel{background:var(--blue);border-color:var(--blue);color:#fff}
+.opt.ok{background:var(--ok)!important;border-color:var(--ok)!important;color:#fff}
+.opt.bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff}
+/* picture / media blank space */
+.picture{border:4px dashed #c9bdff;border-radius:18px;min-height:200px;display:grid;place-items:center;color:#a79bd8;font-weight:800;text-align:center;background:repeating-linear-gradient(45deg,#faf8ff,#faf8ff 12px,#f3efff 12px,#f3efff 24px);margin-bottom:10px}
+audio{width:100%;margin:6px 0}
+/* greeting table */
+table.greet{border-collapse:collapse;width:100%;max-width:440px;border-radius:14px;overflow:hidden;box-shadow:0 0 0 3px #ffe08a}
+.greet th{background:var(--yellow);padding:8px;font-family:var(--font-title);font-size:1.15rem}
+.greet td{padding:10px 14px;vertical-align:top;font-weight:700;background:#fffbea;line-height:1.7}
+/* word search */
+.ws{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-width:440px;margin:10px 0;user-select:none}
+.cell{aspect-ratio:1;display:grid;place-items:center;font-weight:800;border-radius:10px;background:#f1edff;cursor:pointer;transition:.15s;font-size:1.05rem}
+.cell:hover{background:#d9cfff;transform:scale(1.1)}
+.cell.start{background:var(--yellow);transform:scale(1.15)}
+.cell.found{color:#fff}
+.slots{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.slot{min-width:96px;text-align:center;padding:5px 12px;border-radius:50px;border:3px dashed #cfc5ff;font-weight:800;color:transparent;transition:.3s}
+.slot.got{color:#fff;border-style:solid;border-color:transparent;animation:pop .4s}
+@keyframes pop{50%{transform:scale(1.25)}}
+/* word search demo ("Show me how") */
+.demo-btn{background:var(--purple);font-size:1rem;padding:8px 20px;margin:4px 0 10px}
+.demo{background:#f7f3ff;border:3px dashed #cbbcff;border-radius:18px;padding:14px;margin-bottom:14px;max-width:440px}
+.demo[hidden]{display:none}
+.demo-grid{position:relative;max-width:260px;margin:0 auto}
+.demo-ws{grid-template-columns:repeat(5,1fr)!important;margin:0!important;pointer-events:none}
+.dcell{aspect-ratio:1;display:grid;place-items:center;font-weight:800;border-radius:10px;background:#fff;transition:.25s}
+.dcell.on{background:var(--yellow);transform:scale(1.12)}
+.dcell.done{color:#fff}
+.finger{position:absolute;font-size:1.7rem;pointer-events:none;transition:left .4s,top .4s;transform:translate(-30%,-10%);filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
+.demo-cap{text-align:center;font-weight:800;min-height:3em;margin:10px 0 0}
+.btn:disabled{opacity:.75;cursor:default;transform:none}
+/* attention sign for the "Show me how" button */
+.demo-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.demo-btn.attn{animation:ring 1.3s ease-out infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(138,92,255,.7),0 6px 0 rgba(0,0,0,.18)}100%{box-shadow:0 0 0 20px rgba(138,92,255,0),0 6px 0 rgba(0,0,0,.18)}}
+.demo-hint{font-weight:800;color:var(--purple);background:#efe8ff;padding:6px 14px;border-radius:50px;animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(-8px)}}
+/* ===== 6. PROGRESS / RESULT ===== */
+.bar-wrap{position:sticky;top:0;z-index:5;background:rgba(255,247,232,.92);backdrop-filter:blur(6px);padding:10px 4px;border-radius:0 0 18px 18px}
+.bar{height:16px;border-radius:50px;background:#e8e2ff;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:50px;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--green));transition:width .5s}
+.bar-txt{font-weight:800;font-size:.9rem;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:4px}
+.result{text-align:center;display:none}
+.result.show{display:block;animation:pop .5s}
+.score{font-family:var(--font-title);font-size:3.4rem;font-weight:800;color:var(--purple);margin:0}
+.msg{font-size:1.3rem;font-weight:800}
+/* ===== 7. BUTTONS ===== */
+.btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:20px}
+.btn{font:inherit;font-family:var(--font-title);font-size:1.15rem;cursor:pointer;border:0;color:#fff;padding:12px 26px;border-radius:50px;box-shadow:0 6px 0 rgba(0,0,0,.18);transition:.15s}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.b-fin{background:var(--green)} .b-save{background:var(--blue)} .b-reset{background:var(--orange)}
+/* toast */
+#toasts{position:fixed;top:14px;right:14px;z-index:50;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--ink);color:#fff;font-weight:800;padding:12px 18px;border-radius:14px;box-shadow:var(--shadow);animation:slide .35s,fade .4s 3s forwards}
+.toast.good{background:var(--ok)} .toast.warn{background:var(--bad)}
+@keyframes slide{from{transform:translateX(120%)}}
+@keyframes fade{to{opacity:0;transform:translateY(-10px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- floating stars (created by JS) -->
+<div class="stars" id="stars" aria-hidden="true"></div>
+<div id="toasts" role="status" aria-live="polite"></div>
+
+<main>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <h1><span class="bounce">🌟</span> Homework <span class="bounce" style="animation-delay:.4s">📚</span></h1>
+    <p>Verb be · Greetings · Plurals — let's practise! ✏️</p>
+  </header>
+
+  <!-- ===== STUDENT INFO ===== -->
+  <section class="card" aria-label="Student information">
+    <div class="info-grid">
+      <div><label class="f" for="sName">👤 Full Name</label><input type="text" id="sName" placeholder="Write your name"></div>
+      <div><label class="f" for="sClass">🏫 Number</label><input type="text" id="sClass" placeholder=" 1,2,3"></div>
+      <div><label class="f" for="sDate">📅 Date</label><input type="date" id="sDate"></div>
+    </div>
+  </section>
+
+  <!-- ===== PROGRESS ===== -->
+  <div class="bar-wrap">
+    <div class="bar-txt"><span>Progress ⭐</span><span id="barTxt">0%</span></div>
+    <div class="bar"><i id="barFill"></i></div>
+  </div>
+
+  <!-- ===== EXERCISES (rendered by JS) ===== -->
+  <div id="exercises"></div>
+
+  <!-- ===== RESULT ===== -->
+  <section class="card result" id="result">
+    <p class="score" id="scoreTxt"></p>
+    <p class="msg" id="scoreMsg"></p>
+  </section>
+
+  <!-- ===== BUTTONS ===== -->
+  <div class="btns">
+    <button class="btn b-fin" id="btnSubmit">🚀 Submit</button>
+  </div>
+</main>
+
+<script>
+/* ============ CONFIG ============ */
+// Paste your deployed Google Apps Script web app URL here (see sample code at the bottom)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIEfqoZSI2edXOz2BFQg7F9_hy-BxAsAE5XIKDtiKIMMKISIdWi3SmmxKo19Z0YpIR/exec";
+
+/* ============ YOUR TWO MEDIA FILES ============
+   Put picture.jpg and audio.wav in the SAME folder as this HTML file.
+   If your files have different names or extensions, change only these two names.
+*/
+const MEDIA = {
+  audio: "audio.wav",
+  picture: "picture.jpg"
+};
+
+/* ============ QUESTION DATA ============ */
+// Fill-in items: "___" marks a blank; answers = list of accepted answers per blank.
+const SECTIONS = [
+  { id:"be", title:"🎯 Verb be in the present", color:"var(--pink)", activities:[
+    { title:"Activity 1: Listen to the dialogue 🎧", kind:"media", instr:"Listen, then look at the picture.", audioKey:"audio", picKey:"picture" },
+    { title:"Activity 2: Comprehension 🧠", kind:"open", instr:"A. Answer the questions.", items:[
+      "What is the boy's name?", "How old is Sara?", "Is Sara a new student?", "Are Adam and Sara in the same class?" ] },
+    { title:"Activity 3: Complete with the correct form of the verb be ✍️", kind:"fill", instr:"Complete the sentences with the correct form of the verb be.", items:[
+      { t:"I ___ (be) thirteen years old, but my sister ___ (be) twelve.", a:[["am"],["is"]] },
+      { t:"___ (be) you a new student? Yes, I ___ (be).", a:[["are"],["am"]] },
+      { t:"They ___ (be) at school today because it ___ (be) Sunday.", a:[["are"],["is"]] },
+      { t:"___ (be) he your English teacher? No, he ___ (not / be).", a:[["is"],["isn't","is not"]] },
+      { t:"I ___ (not / be) late today. I am early!", a:[["am not","'m not","m not"]] },
+      { t:"___ (be) we in the correct classroom? No, we ___ (not / be).", a:[["are"],["aren't","are not"]] },
+      { t:"My school ___ (be) very big, but its classrooms ___ (be) small.", a:[["is"],["are"]] },
+      { t:"Adam and Youssef ___ (be) classmates. They ___ (be) in the same class.", a:[["are"],["are"]] },
+      { t:"___ (be) your mother at home? Yes, she ___ (be).", a:[["is"],["is"]] } ] },
+    { title:"Activity 4: Short answers 💬", kind:"fill", instr:"Write the short answer.", items:[
+      { t:"Are you a student? Yes, I ___.", a:[["am"]] },
+      { t:"Is he your brother? No, he ___.", a:[["isn't","is not"]] },
+      { t:"Are they friends? Yes, they ___.", a:[["are"]] },
+      { t:"Is she at home? No, she ___.", a:[["isn't","is not"]] } ] }
+  ]},
+  { id:"greet", title:"👋 Expressions of greeting", color:"var(--blue)", activities:[
+    { title:"Activity 1: Practise these expressions 🗣️", kind:"table" },
+    { title:"Activity 3: Choose the right expression 🎯", kind:"choice", instr:"Match each situation with an appropriate expression.", items:[
+      { q:"You meet your teacher at 8 a.m.", o:["Good morning!","Good night!"], a:"Good morning!" },
+      { q:"You leave your friend.", o:["See you later!","How are you?"], a:"See you later!" },
+      { q:"You ask about someone's well-being.", o:["Take care!","How are you?"], a:"How are you?" } ] },
+    { title:"Activity 4: Complete the conversation 💭", kind:"convo", instr:"Write what B says.", items:[
+      "A: Hello! How are you?", "A: How's everything?", "A: See you tomorrow!" ] }
+  ]},
+  { id:"plural", title:"🍎 Plural nouns", color:"var(--green)", activities:[
+    { title:"Choose the correct plural ✅", kind:"choice", instr:"Tap the correct plural.", items:[
+      { q:"The ___ are in the playground.", o:["children","childs","childrens"], a:"children" },
+      { q:"My mother bought five ___.", o:["tomatos","tomatoes","tomatoies"], a:"tomatoes" },
+      { q:"Those ___ are sharp.", o:["knifes","knives","knife"], a:"knives" },
+      { q:"The ___ are working in the garden.", o:["men","mans","mens"], a:"men" },
+      { q:"I can see three ___ in the park.", o:["babys","babies","babyes"], a:"babies" },
+      { q:"There are many ___ in the picture.", o:["tooth","tooths","teeth"], a:"teeth" },
+      { q:"There are five ___ on the ground.", o:["leaves","leafs","leafes"], a:"leaves" },
+      { q:"The ___ of the table are broken.", o:["feet","foots","feets"], a:"feet" },
+      { q:"The students opened their ___ and started reading.", o:["bookes","books","book"], a:"books" },
+      { q:"I ate two ___ at lunch.", o:["sandwichs","sandwiches","sandwichies"], a:"sandwiches" },
+      { q:"There are many ___ in Morocco.", o:["cities","citys","cityes"], a:"cities" } ] },
+    { title:"Activity: Find the plural nouns 🔍", kind:"search", instr:"Find the 12 plural nouns. They can go across, down or diagonally. Drag across the letters, or tap the first letter and then the last letter.",
+      grid:["BOOKSXMPLT","CHILDRENAO","WATCHESTBY","KNIVESROUS","APPLESCXIE","BOXESDHEST","MICEAFOOTS","TOMATOESLR","WOMENBAGSA","DISHESPENS"],
+      words:["BOOKS","CHILDREN","WATCHES","KNIVES","APPLES","BOXES","MICE","TOMATOES","WOMEN","BAGS","DISHES","PENS"] }
+  ]}
+];
+
+const GREETINGS = { Hello:["Good morning!","How are you?","How's everything?"], Goodbye:["See you later!","Good night!","Take care!","Bye!","See you!"] };
+const MESSAGES = [
+  [100,"🏆 PERFECT! You're a superstar!"],[80,"🎉 Great job! Almost perfect!"],
+  [50,"💪 Good effort! Keep practising!"],[0,"🌱 Nice try! Try again and you'll grow!"]
+];
+
+/* ============ STATE ============ */
+const state = { vals:{}, checked:false, found:new Set(), start:null };
+const scorable = []; // {key, type, answers}
+const $ = s => document.querySelector(s);
+const norm = s => (s||"").toLowerCase().replace(/[’‘]/g,"'").replace(/[.!?]/g,"").trim().replace(/\s+/g," ");
+
+/* ============ TOAST ============ */
+function toast(text, type=""){
+  const t = document.createElement("div");
+  t.className = "toast "+type; t.textContent = text;
+  $("#toasts").appendChild(t); setTimeout(()=>t.remove(),3600);
+}
+
+/* ============ RENDER ============ */
+function render(){
+  const root = $("#exercises"); root.innerHTML = ""; scorable.length = 0;
+  SECTIONS.forEach(sec=>{
+    const card = document.createElement("section"); card.className = "card";
+    card.innerHTML = `<h2 class="section-title" style="background:${sec.color}">${sec.title}</h2>`;
+    sec.activities.forEach((act,ai)=>{
+      const box = document.createElement("div"); box.className = "activity";
+      box.innerHTML = `<h3>${act.title}</h3>${act.instr?`<p class="instr">${act.instr}</p>`:""}`;
+      const id = `${sec.id}${ai}`;
+      ({media:rMedia, open:rOpen, fill:rFill, table:rTable, choice:rChoice, convo:rConvo, search:rSearch})[act.kind](box,act,id);
+      card.appendChild(box);
+    });
+    root.appendChild(card);
+  });
+  // input listeners
+  root.querySelectorAll("input.blank").forEach(inp=>inp.addEventListener("input",()=>{ state.vals[inp.dataset.k]=inp.value; updateProgress(); }));
+  updateProgress();
+}
+
+// Show the audio player and picture for a media activity.
+function rMedia(box, act, id) {
+  const audioSrc = MEDIA[act.audioKey];
+  const imgSrc = MEDIA[act.picKey];
+  const audioType = audioSrc && audioSrc.toLowerCase().endsWith(".mp3")
+    ? "audio/mpeg"
+    : audioSrc && audioSrc.toLowerCase().endsWith(".ogg")
+      ? "audio/ogg"
+      : "audio/wav";
+
+  const media = document.createElement("div");
+  media.className = "media-content";
+
+  if (audioSrc) {
+    const audioLabel = document.createElement("p");
+    audioLabel.className = "instr";
+    audioLabel.textContent = "🎧 Listen to the audio:";
+    media.appendChild(audioLabel);
+
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "metadata";
+    audio.setAttribute("aria-label", "Dialogue audio");
+    const source = document.createElement("source");
+    source.src = audioSrc;
+    source.type = audioType;
+    audio.appendChild(source);
+    audio.appendChild(document.createTextNode("Your browser cannot play this audio file."));
+    audio.addEventListener("error", () => {
+      toast("Audio not found. Make sure audio.wav is beside this HTML file.", "warn");
+    }, { once: true });
+    media.appendChild(audio);
+  } else {
+    const message = document.createElement("p");
+    message.className = "instr";
+    message.textContent = "Audio path is missing. Check the MEDIA settings.";
+    media.appendChild(message);
+  }
+
+  if (imgSrc) {
+    const picture = document.createElement("div");
+    picture.className = "picture";
+    picture.style.border = "none";
+    picture.style.background = "transparent";
+    picture.style.minHeight = "auto";
+
+    const img = document.createElement("img");
+    img.src = imgSrc;
+    img.alt = "Activity picture";
+    img.loading = "lazy";
+    img.style.maxWidth = "100%";
+    img.style.height = "auto";
+    img.style.borderRadius = "14px";
+    img.addEventListener("error", () => {
+      picture.textContent = "Picture not found: " + imgSrc + " — check the file name and folder.";
+      picture.style.border = "2px dashed #f0455a";
+      picture.style.padding = "16px";
+    }, { once: true });
+    picture.appendChild(img);
+    media.appendChild(picture);
+  } else {
+    const message = document.createElement("p");
+    message.className = "instr";
+    message.textContent = "Picture path is missing. Check the MEDIA settings.";
+    media.appendChild(message);
+  }
+
+  box.appendChild(media);
+}
+
+function rOpen(box,act,id){
+  act.items.forEach((q,i)=>{
+    const k=`${id}-${i}`;
+    box.insertAdjacentHTML("beforeend",`<div class="q"><span class="n">${i+1}.</span><span>${q}</span><input type="text" class="blank long" data-k="${k}" aria-label="Answer ${i+1}"></div>`);
+  });
+  box.insertAdjacentHTML("beforeend",`<p class="instr">📝 Your teacher will check these answers.</p>`);
+}
+function rFill(box,act,id){
+  act.items.forEach((it,i)=>{
+    let b=0;
+    const html = it.t.replace(/___/g,()=>{ const k=`${id}-${i}-${b}`; scorable.push({key:k,type:"fill",answers:it.a[b].map(norm)}); b++;
+      return `<input type="text" class="blank" data-k="${k}" autocomplete="off" aria-label="Blank">`; });
+    box.insertAdjacentHTML("beforeend",`<div class="q"><span class="n">${i+1}.</span><span>${html}</span></div>`);
+  });
+}
+function rTable(box){
+  let h = `<table class="greet"><tr>${Object.keys(GREETINGS).map(k=>`<th>${k==="Hello"?"👋 ":"🙋 "}${k}</th>`).join("")}</tr><tr>`;
+  h += Object.values(GREETINGS).map(l=>`<td>${l.join("<br>")}</td>`).join("")+"</tr></table>";
+  box.insertAdjacentHTML("beforeend",h);
+}
+function rChoice(box,act,id){
+  act.items.forEach((it,i)=>{
+    const k=`${id}-${i}`; scorable.push({key:k,type:"choice",answers:[norm(it.a)]});
+    const row=document.createElement("div"); row.className="q";
+    row.innerHTML=`<span class="n">${i+1}.</span><span>${it.q.replace("___","<b>______</b>")}</span><div class="opts"></div>`;
+    it.o.forEach(o=>{
+      const b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=o; b.dataset.k=k;
+      b.onclick=()=>{ if(state.checked) return; row.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); state.vals[k]=o; updateProgress(); };
+      row.querySelector(".opts").appendChild(b);
+    });
+    box.appendChild(row);
+  });
+}
+function rConvo(box,act,id){
+  act.items.forEach((a,i)=>{
+    box.insertAdjacentHTML("beforeend",`<div class="q"><b>${a}</b></div><div class="q"><span class="n">B:</span><input type="text" class="blank long" data-k="${id}-${i}" aria-label="B answer"></div>`);
+  });
+}
+function rSearch(box,act,id){
+  box.appendChild(makeDemo());
+  const g=document.createElement("div"); g.className="ws";
+  act.grid.forEach((row,r)=>[...row].forEach((ch,c)=>{
+    const d=document.createElement("div"); d.className="cell"; d.textContent=ch; d.dataset.r=r; d.dataset.c=c;
+    g.appendChild(d);
+  }));
+  wsStart=null; attachWS(g,act);
+  const slots=document.createElement("div"); slots.className="slots";
+  act.words.forEach(w=>{ slots.insertAdjacentHTML("beforeend",`<span class="slot" data-w="${w}">${w}</span>`); });
+  box.appendChild(g); box.appendChild(slots);
+  box.insertAdjacentHTML("beforeend",`<p class="instr" id="wsCount">Found: 0 / ${act.words.length}</p>`);
+  act.words.forEach(w=>scorable.push({key:"ws-"+w,type:"ws",answers:[w]}));
+}
+
+/* ============ WORD SEARCH DEMO (animated example) ============ */
+function makeDemo(){
+  const wrap=document.createElement("div");
+  wrap.innerHTML=`<div class="demo-row"><button type="button" class="btn demo-btn attn">👀 Show me how</button><span class="demo-hint">👈 Tap here first!</span></div>
+    <div class="demo" hidden><div class="demo-grid"><div class="ws demo-ws"></div><span class="finger">👆</span></div><p class="demo-cap"></p></div>`;
+  const rows=["CATSD","XMPQO","LRVBG","HKJNS","WZUFY"]; // example grid: CATS (across) and DOGS (down)
+  const ws=wrap.querySelector(".demo-ws"), finger=wrap.querySelector(".finger"), cap=wrap.querySelector(".demo-cap");
+  const demo=wrap.querySelector(".demo"), btn=wrap.querySelector(".demo-btn");
+  rows.forEach(r=>[...r].forEach(ch=>{ const d=document.createElement("div"); d.className="dcell"; d.textContent=ch; ws.appendChild(d); }));
+  const cell=(r,c)=>ws.children[r*5+c];
+  const wait=ms=>new Promise(res=>setTimeout(res,ms));
+  const put=(r,c)=>{ const el=cell(r,c); finger.style.left=(el.offsetLeft+el.offsetWidth/2)+"px"; finger.style.top=(el.offsetTop+el.offsetHeight/2)+"px"; };
+  const steps=[
+    { path:[[0,0],[0,1],[0,2],[0,3]], color:"var(--pink)", t1:"1️⃣ Press the FIRST letter of the word (C)…", t2:"2️⃣ Drag to the LAST letter (S). CATS is found! 🎉" },
+    { path:[[0,4],[1,4],[2,4],[3,4]], color:"var(--blue)", t1:"Words can go DOWN too ⬇️ Start at D…", t2:"DOGS is found! 🐶 You can also just tap the first and last letters." }
+  ];
+  let token=0;
+  async function play(){
+    const my=++token;
+    while(my===token){
+      [...ws.children].forEach(x=>{ x.className="dcell"; x.style.background=""; });
+      for(const st of steps){
+        cap.textContent=st.t1; put(...st.path[0]); await wait(1400); if(my!==token) return;
+        for(const [r,c] of st.path){ cell(r,c).classList.add("on"); put(r,c); await wait(550); if(my!==token) return; }
+        cap.textContent=st.t2;
+        st.path.forEach(([r,c])=>{ const el=cell(r,c); el.classList.remove("on"); el.classList.add("done"); el.style.background=st.color; });
+        await wait(2200); if(my!==token) return;
+      }
+      await wait(800);
+    }
+  }
+  btn.onclick=()=>{
+    btn.classList.remove("attn"); const hint=wrap.querySelector(".demo-hint"); if(hint) hint.remove();
+    demo.hidden=!demo.hidden;
+    btn.textContent=demo.hidden?"👀 Show me how":"✖️ Close example";
+    if(demo.hidden) token++; else play();
+  };
+  return wrap;
+}
+
+/* ============ WORD SEARCH LOGIC ============ */
+// Works two ways: DRAG across the letters, or TAP the first letter then TAP the last letter.
+// Words can go in any straight direction (→ ← ↓ ↑ and diagonals).
+const WS_COLORS=["var(--pink)","var(--blue)","var(--green)","var(--purple)","var(--orange)"];
+let wsStart=null, wsDown=false;
+const cellAt=(r,c)=>document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+// returns the cells on a straight line from a to b, or null if not straight
+function lineCells(a,b){
+  const dr=+b.dataset.r-+a.dataset.r, dc=+b.dataset.c-+a.dataset.c;
+  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc))) return null;
+  const len=Math.max(Math.abs(dr),Math.abs(dc))+1, sr=Math.sign(dr), sc=Math.sign(dc);
+  return Array.from({length:len},(_,i)=>cellAt(+a.dataset.r+sr*i,+a.dataset.c+sc*i));
+}
+function showPreview(cells){
+  document.querySelectorAll(".cell.start").forEach(x=>x.classList.remove("start"));
+  if(cells) cells.forEach(x=>x.classList.add("start"));
+}
+function attachWS(g,act){
+  g.style.touchAction="none"; // lets fingers drag without scrolling the page
+  const cellFrom=e=>{ const el=document.elementFromPoint(e.clientX,e.clientY); return el&&el.classList.contains("cell")?el:null; };
+  g.addEventListener("pointerdown",e=>{
+    const c=cellFrom(e); if(!c) return; e.preventDefault();
+    if(wsStart && wsStart!==c){ finishWS(wsStart,c,act); wsStart=null; return; } // second tap
+    wsStart=c; wsDown=true; showPreview([c]);
+  });
+  g.addEventListener("pointermove",e=>{
+    if(!wsDown||!wsStart) return;
+    const c=cellFrom(e); if(c) showPreview(lineCells(wsStart,c)||[wsStart]);
+  });
+  window.addEventListener("pointerup",e=>{
+    if(!wsDown) return; wsDown=false;
+    const c=cellFrom(e);
+    if(c && c!==wsStart){ finishWS(wsStart,c,act); wsStart=null; } // drag finished
+    // otherwise it was a tap: first letter stays highlighted, waiting for the last letter
+  });
+}
+function finishWS(a,b,act){
+  const cells=lineCells(a,b); showPreview(null);
+  if(!cells){ toast("Pick letters in a straight line 🙂","warn"); return; }
+  const word=cells.map(x=>x.textContent).join(""), rev=[...word].reverse().join("");
+  const hit=act.words.find(w=>w===word||w===rev);
+  if(hit && !state.found.has(hit)){
+    state.found.add(hit);
+    const col=WS_COLORS[state.found.size%WS_COLORS.length];
+    cells.forEach(el=>{ el.classList.add("found"); el.style.background=col; });
+    const slot=document.querySelector(`.slot[data-w="${hit}"]`); slot.classList.add("got"); slot.style.background=col;
+    $("#wsCount").textContent=`Found: ${state.found.size} / ${act.words.length}`;
+    toast(`🎉 You found ${hit}!`,"good"); updateProgress();
+  } else toast(hit?"Already found!":"Not a plural word. Try again 🔍","warn");
+}
+
+/* ============ PROGRESS & SCORING ============ */
+function answered(s){ return s.type==="ws" ? state.found.has(s.answers[0]) : !!(state.vals[s.key]||"").trim(); }
+function updateProgress(){
+  const done=scorable.filter(answered).length, pct=Math.round(done/scorable.length*100);
+  $("#barFill").style.width=pct+"%"; $("#barTxt").textContent=`${pct}% (${done}/${scorable.length})`;
+}
+function isCorrect(s){ return s.type==="ws" ? state.found.has(s.answers[0]) : s.answers.includes(norm(state.vals[s.key])); }
+function check(){
+  state.checked=true; let score=0;
+  scorable.forEach(s=>{
+    const ok=isCorrect(s); if(ok) score++;
+    if(s.type==="fill"){ const el=document.querySelector(`input[data-k="${s.key}"]`); el.classList.remove("ok","bad"); el.classList.add(ok?"ok":"bad"); }
+    if(s.type==="choice") document.querySelectorAll(`.opt[data-k="${s.key}"]`).forEach(b=>{
+      b.classList.remove("ok","bad");
+      if(norm(b.textContent)===s.answers[0]) b.classList.add("ok"); else if(b.classList.contains("sel")) b.classList.add("bad"); });
+  });
+  return score;
+}
+
+/* ============ BUTTONS ============ */
+// One button does everything: check answers, show score + confetti, save to Google Sheets
+$("#btnSubmit").onclick=async()=>{
+  const btn=$("#btnSubmit");
+  if(!$("#sName").value.trim()){ toast("Please write your name first 👤","warn"); $("#sName").focus(); return; }
+  btn.disabled=true; btn.textContent="Submitting... ⏳";
+  const score=check(), total=scorable.length, pct=Math.round(score/total*100);
+  $("#scoreTxt").textContent=`${score} / ${total}`;
+  $("#scoreMsg").textContent=MESSAGES.find(m=>pct>=m[0])[1];
+  $("#result").classList.add("show"); $("#result").scrollIntoView({behavior:"smooth",block:"center"});
+  if(typeof confetti==="function"){ // 🎊 confetti!
+    confetti({particleCount:160,spread:90,origin:{y:.65}});
+    setTimeout(()=>confetti({particleCount:100,angle:60,spread:70,origin:{x:0,y:.7}}),300);
+    setTimeout(()=>confetti({particleCount:100,angle:120,spread:70,origin:{x:1,y:.7}}),500);
+  }
+  
+  const payload={
+    timestamp:new Date().toISOString(),
+    student:{
+      fullName:$("#sName").value.trim(),
+      grade:$("#sClass").value.trim(),
+      date:$("#sDate").value
+    },
+    score:{score,total},
+    answers:{ ...state.vals, wordsFound:[...state.found].join(", ") }
+  };
+  if(SCRIPT_URL.includes("YOUR_SCRIPT_ID")){ toast("Teacher: add your Apps Script URL in the code ⚙️","warn"); btn.textContent="✅ Submitted"; return; }
+  try{
+    // text/plain avoids the CORS preflight that Apps Script does not support
+    await fetch(SCRIPT_URL,{ method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
+    toast("Submitted! Well done 🎉","good"); btn.textContent="✅ Submitted!";
+  }catch(e){ toast("Could not submit. Check your connection ❌","warn"); btn.disabled=false; btn.textContent="🚀 Submit"; }
+};
+
+/* ============ FLOATING STARS ============ */
+(function(){
+  const box=$("#stars"), icons=["⭐","✨","🌟","💫","🎈"];
+  for(let i=0;i<22;i++){
+    const s=document.createElement("span"); s.className="star"; s.textContent=icons[i%icons.length];
+    s.style.left=Math.random()*100+"%"; s.style.fontSize=(14+Math.random()*22)+"px";
+    s.style.animationDuration=(12+Math.random()*18)+"s"; s.style.animationDelay=(-Math.random()*25)+"s";
+    box.appendChild(s);
+  }
+})();
+
+/* ============ INIT ============ */
+$("#sDate").valueAsDate=new Date();
+render();
+
+/* =====================================================================
+   GOOGLE APPS SCRIPT SAMPLE 
+   (Paste this code into script.google.com, then Deploy > Manage Deployments > 
+   Edit (Pencil Icon) > New Version > Deploy)
+
+   function doPost(e) {
+     try {
+       const data = JSON.parse(e.postData.contents);
+       const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+       
+       // Create headers if the sheet is empty
+       if (sheet.getLastRow() === 0) {
+         sheet.appendRow(["Timestamp", "Full Name", "Class / Grade", "Date", "Score", "Answers"]);
+       }
+       
+       // Safely extract the score whether it arrives as an object or a plain number
+       let finalScore = "No score found";
+       if (data.score && typeof data.score === 'object') {
+         finalScore = data.score.score + " / " + data.score.total;
+       } else if (data.score !== undefined) {
+         finalScore = data.score; 
+       }
+       
+       // Append the row mapping exact variable names from the HTML
+       sheet.appendRow([
+         data.timestamp || new Date().toISOString(), 
+         data.student ? data.student.fullName : "", 
+         data.student ? data.student.grade : "",
+         data.student ? data.student.date : "", 
+         finalScore, 
+         data.answers ? JSON.stringify(data.answers) : ""
+       ]);
+       
+       return ContentService.createTextOutput(JSON.stringify({ok:true}))
+              .setMimeType(ContentService.MimeType.JSON);
+              
+     } catch (error) {
+       return ContentService.createTextOutput(JSON.stringify({error: error.message}))
+              .setMimeType(ContentService.MimeType.JSON);
+     }
+   }
+   ===================================================================== */
+</script>
+</body>
+</html>
